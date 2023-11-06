@@ -1,95 +1,124 @@
-import Image from 'next/image'
-import styles from './page.module.css'
+"use client";
+
+import { ChangeEvent, useEffect, useState } from "react";
+import styles from "./page.module.css";
+import Contact from "@/components/contact";
+import { Button } from "@/components/button";
+import useContactsReducer from "@/hooks/reducers/contacts.reducer";
+
+import { Contact as ContactType } from "@/types/contact.type";
+import { Search } from "@/components/search";
+import CreateOrEditContact from "@/components/edit-contact";
+import { fetchContacts } from "@/lib/fetch-contacts";
+import { createContacts } from "@/lib/create-contact";
+import { updateContact } from "@/lib/update-contact";
+import { deleteContact } from "@/lib/remove-contact";
 
 export default function Home() {
+  const [contactsState, dispatch] = useContactsReducer();
+  const { contacts, selectedContact, enableCreateOrEditContact } =
+    contactsState;
+
+  const [filteredContacts, setFilteredContacts] = useState<ContactType[]>([]);
+
+  useEffect(() => {
+    fetchContacts(dispatch);
+  }, [enableCreateOrEditContact]);
+
+  useEffect(() => {
+    setFilteredContacts(contacts);
+  }, [contacts]);
+
+  const selectedContactDetails = (contact: ContactType) => {
+    dispatch({ type: "SELECTED_CONTACT_DETAILS", payload: contact });
+  };
+
+  const openModal = async () => {
+    dispatch({ type: "ENABLE_CREATE_OR_EDIT_CONTACT", payload: true });
+  };
+
+  const closeModal = async () => {
+    dispatch({ type: "ENABLE_CREATE_OR_EDIT_CONTACT", payload: false });
+  };
+
+  const saveUpdatedContact = async (contact: ContactType) => {
+    await updateContact(dispatch, contact);
+  };
+
+  const createNewContact = async (contact: ContactType) => {
+    await createContacts(dispatch, contact);
+  };
+
+  const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
+    const filteredContacts = contacts.filter((contact) =>
+      contact.searchIndex?.includes(e.target.value)
+    );
+    setFilteredContacts(filteredContacts);
+  };
+
   return (
     <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
-
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
+      <div
+        style={{
+          marginBottom: "4rem",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        <Search
+          type="text"
+          name="search"
+          placeholder="Search your contacts.."
+          onChange={(e) => handleSearch(e)}
         />
+        <Button onClick={openModal}>Add Contact</Button>
       </div>
 
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
+      {enableCreateOrEditContact && (
+        <CreateOrEditContact
+          isOpen={true}
+          onCancel={closeModal}
+          onSave={selectedContact ? saveUpdatedContact : createNewContact}
+          contact={selectedContact}
+        />
+      )}
 
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore the Next.js 13 playground.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
+      <div
+        style={{
+          display: "flex",
+          flexFlow: "column wrap",
+          height: "650px",
+        }}
+      >
+        {filteredContacts.map((contact) => {
+          const show = selectedContact?.id === contact.id;
+          return (
+            <>
+              {!show ? (
+                <div
+                  className="cursor-pointer"
+                  onClick={() => selectedContactDetails(contact)}
+                >
+                  <Contact
+                    key={contact.id}
+                    contact={contact}
+                    show={show}
+                  ></Contact>
+                </div>
+              ) : (
+                <Contact
+                  key={contact.id}
+                  contact={contact}
+                  show={show}
+                  onRemove={() => deleteContact(dispatch, contact)}
+                  onSave={() => openModal()}
+                ></Contact>
+              )}
+            </>
+          );
+        })}
       </div>
     </main>
-  )
+  );
 }
