@@ -1,36 +1,21 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
-
 ## Getting Started
 
 First, run the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Data Structure
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+The contacts data structure is slightly transformed to optimse the search complexity where a new key (searchIndex) value is added to each object which is particularly useful when you need to filter, sort, or search for data based on multiple criteria simultaneously. This technique is used to speed up the retrieval of data and make queries more efficient.
 
-## Learn More
+## Time Complexity of the Search Operation
 
-To learn more about Next.js, take a look at the following resources:
+Big O notation for search functionality is O(n), where 'n' is the number of elements in the contacts array.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+The filter function iterates through each element in the contacts array, and for each element, it checks if the searchIndex property contains the value of e.target.value. This involves traversing each element of the array once, resulting in a linear time complexity of O(n), where 'n' is the number of elements in the array.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+In the worst case, the entire array may need to be scanned to filter the elements that match the condition.

@@ -33,14 +33,18 @@ export default function Contact(props: ContactProps) {
           <div className="flex justify-between items-center">
             <Avatar src={props.contact.avatar} />
             <div>
-              <div className="text-xs font-bold">{props.contact.name}</div>
+              <div className="text-xs font-semibold font-medium">
+                {props.contact.name}
+              </div>
               <div className={`text-xs text-muted-foreground ${hide}`}>
                 {props.contact.birthday}
               </div>
             </div>
           </div>
           <div className={`mt-6 ${hide}`}>
-            <div className="text-xs font-bold">{props.contact.phone}</div>
+            <div className="text-xs font-semibold font-medium">
+              {props.contact.phone}
+            </div>
             <p className="text-xs text-muted-foreground">
               {props.contact.email}
             </p>
@@ -51,8 +55,12 @@ export default function Contact(props: ContactProps) {
         </CardContent>
         <div className={`${hide}`}>
           <CardFooter>
-            <Button onClick={remove}>Remove</Button>
-            <Button onClick={save}>Edit</Button>
+            <Button data-cy="remove-contact-button" onClick={remove}>
+              Remove
+            </Button>
+            <Button data-cy="edit-contact-button" onClick={save}>
+              Edit
+            </Button>
           </CardFooter>
         </div>
       </Card>

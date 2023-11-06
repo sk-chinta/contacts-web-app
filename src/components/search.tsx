@@ -7,7 +7,7 @@ export interface InputProps
 const Search = React.forwardRef<HTMLInputElement, InputProps>(
   ({ className, type, ...props }, ref) => {
     return (
-      <div className="w-80">
+      <div className="w-80 w-full">
         <Input ref={ref} {...props}></Input>
       </div>
     );

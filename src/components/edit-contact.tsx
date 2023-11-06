@@ -37,7 +37,7 @@ export default function CreateOrEditContact(props: ContactProps) {
   return (
     <>
       <Modal>
-        <Card className="w-100 h-150">
+        <Card className="w-100 h-150 ">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
               Contact Details
@@ -89,13 +89,17 @@ export default function CreateOrEditContact(props: ContactProps) {
                 isSubmitting,
               }) => (
                 <form onSubmit={handleSubmit}>
-                  <p className="text-sm pb-2">
+                  <p data-cy="input-name-label" className="text-sm pb-2">
                     Enter name:
-                    <span className="text-red-700 pl-2">
+                    <span
+                      data-cy="input-name-error"
+                      className="text-red-700 pl-2"
+                    >
                       {errors.name && touched.name && errors.name}
                     </span>
                   </p>
                   <Input
+                    data-cy="input-name"
                     type="text"
                     onChange={handleChange}
                     onBlur={handleBlur}
@@ -103,8 +107,11 @@ export default function CreateOrEditContact(props: ContactProps) {
                     name="name"
                     value={values.name}
                   />
-                  <p className="text-sm pb-2">Enter avatar url:</p>
+                  <p data-cy="input-avatar-label" className="text-sm pb-2">
+                    Enter avatar url:
+                  </p>
                   <Input
+                    data-cy="input-avatar"
                     onChange={handleChange}
                     onBlur={handleBlur}
                     placeholder="Enter avatar url"
@@ -112,13 +119,17 @@ export default function CreateOrEditContact(props: ContactProps) {
                     value={values.avatar}
                   ></Input>
 
-                  <p className="text-sm pb-2">
+                  <p data-cy="input-email-label" className="text-sm pb-2">
                     Enter email:
-                    <span className="text-red-700 pl-2">
+                    <span
+                      data-cy="input-email-error"
+                      className="text-red-700 pl-2"
+                    >
                       {errors.email && touched.email && errors.email}
                     </span>
                   </p>
                   <Input
+                    data-cy="input-email"
                     type="email"
                     onChange={handleChange}
                     onBlur={handleBlur}
@@ -126,8 +137,11 @@ export default function CreateOrEditContact(props: ContactProps) {
                     name="email"
                     value={values.email}
                   />
-                  <p className="text-sm pb-2">Enter dob:</p>
+                  <p data-cy="input-dob-label" className="text-sm pb-2">
+                    Enter dob:
+                  </p>
                   <Input
+                    data-cy="input-dob"
                     onChange={handleChange}
                     onBlur={handleBlur}
                     placeholder="Enter dob"
@@ -135,13 +149,17 @@ export default function CreateOrEditContact(props: ContactProps) {
                     value={values.birthday}
                   ></Input>
 
-                  <p className="text-sm pb-2">
+                  <p data-cy="input-phone-label" className="text-sm pb-2">
                     Enter phone:
-                    <span className="text-red-700 pl-2">
+                    <span
+                      data-cy="input-phone-error"
+                      className="text-red-700 pl-2"
+                    >
                       {errors.phone && touched.phone && errors.phone}
                     </span>
                   </p>
                   <Input
+                    data-cy="input-phone"
                     onChange={handleChange}
                     onBlur={handleBlur}
                     placeholder="Enter phone"
@@ -149,8 +167,14 @@ export default function CreateOrEditContact(props: ContactProps) {
                     value={values.phone}
                   ></Input>
                   <CardFooter>
-                    <Button onClick={cancel}>Cancel</Button>
-                    <Button type="submit" disabled={isSubmitting}>
+                    <Button data-cy="button-cancel" onClick={cancel}>
+                      Cancel
+                    </Button>
+                    <Button
+                      data-cy="button-submit"
+                      type="submit"
+                      disabled={isSubmitting}
+                    >
                       Submit
                     </Button>
                   </CardFooter>

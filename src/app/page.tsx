@@ -57,22 +57,18 @@ export default function Home() {
   };
 
   return (
-    <main className={styles.main}>
-      <div
-        style={{
-          marginBottom: "4rem",
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-        }}
-      >
+    <main className="main">
+      <div className="p-2-sm flex flex-wrap justify-between items-center mb-8">
         <Search
           type="text"
+          data-cy="search-contacts"
           name="search"
           placeholder="Search your contacts.."
           onChange={(e) => handleSearch(e)}
         />
-        <Button onClick={openModal}>Add Contact</Button>
+        <Button data-cy="add-contact" onClick={openModal}>
+          Add Contact
+        </Button>
       </div>
 
       {enableCreateOrEditContact && (
@@ -84,23 +80,19 @@ export default function Home() {
         />
       )}
 
-      <div
-        style={{
-          display: "flex",
-          flexFlow: "column wrap",
-          height: "650px",
-        }}
-      >
-        {filteredContacts.map((contact) => {
+      <div className="masonary">
+        {filteredContacts.map((contact, index) => {
           const show = selectedContact?.id === contact.id;
           return (
             <>
               {!show ? (
                 <div
+                  data-cy={`contact-card`}
                   className="cursor-pointer"
                   onClick={() => selectedContactDetails(contact)}
                 >
                   <Contact
+                    data-cy={`contact-card-${index}`}
                     key={contact.id}
                     contact={contact}
                     show={show}

@@ -46,7 +46,12 @@ const CardFooter = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <div
     ref={ref}
-    style={{ justifyContent: "space-between" }}
+    style={{
+      justifyContent: "space-between",
+      flexWrap: "wrap",
+      rowGap: 4,
+      padding: "1rem",
+    }}
     className="flex p-6 pt-0"
     {...props}
   />
